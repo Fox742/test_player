@@ -38,9 +38,9 @@
             // button1
             // 
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button1.Location = new System.Drawing.Point(47, 80);
+            this.button1.Location = new System.Drawing.Point(12, 12);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(231, 38);
+            this.button1.Size = new System.Drawing.Size(266, 38);
             this.button1.TabIndex = 0;
             this.button1.Text = "Load shedule";
             this.button1.UseVisualStyleBackColor = true;
