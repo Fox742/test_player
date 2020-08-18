@@ -12,9 +12,12 @@ namespace VideoPlayerEngine
     public class Engine
     {
 
+        VideoController videoController = null;
+
         public Engine( BaseInterfaceWrapper interfaceWrapper)
         {
             InterfaceWrapper.initInterface(interfaceWrapper);
+            videoController = new VideoController();
         }
 
         /// <summary>
@@ -26,7 +29,8 @@ namespace VideoPlayerEngine
             try
             {
                 Shedule shd = new Shedule(sheduleFilePath);
-                FutureEventsList fel = new FutureEventsList(shd);
+                //FutureEventsList fel = new FutureEventsList(shd);
+                videoController.LoadShedule(shd);
             }
             catch (ShedOrderException soe)
             {

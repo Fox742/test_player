@@ -11,23 +11,61 @@ namespace VideoPlayerEngine
     /// </summary>
     static class InterfaceWrapper
     {
-        static private BaseInterfaceWrapper _uiWrapper = null;
-        static public void initInterface(BaseInterfaceWrapper uiWrapper)
+
+        public static event BaseInterfaceWrapper.VideoEndEventHandler VideoEndEvent;
+
+        private static BaseInterfaceWrapper _uiWrapper = null;
+        public static void initInterface(BaseInterfaceWrapper uiWrapper)
         {
             _uiWrapper = uiWrapper;
+            _uiWrapper.VideoEndEvent += OnVideoEnd;
         }
+
 
         /// <summary>
         /// Вывести сообщение на экран
         /// </summary>
         /// <param name="message"></param>
         /// <param name="caption"></param>
-        static public void showMessage(string message, string caption = "")
+        public static void showMessage(string message, string caption = "")
         {
             if (_uiWrapper!=null)
             {
                 _uiWrapper.PrintMessage(message,caption);
             }
         }
+
+        private static void OnVideoEnd()
+        {
+            VideoEndEvent();
+        }
+
+        /// <summary>
+        /// Запустить видео
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="position"></param>
+        public static void startVideo(string path, double position = 0.0)
+        {
+            if (_uiWrapper != null)
+            {
+                _uiWrapper.startVideo(path, position);
+            }
+        }
+
+        /// <summary>
+        /// Получить текущую позицию в видеопроигрывателе
+        /// </summary>
+        /// <returns></returns>
+        public static double getCurrentPosition()
+        {
+            double result = 0;
+            if (_uiWrapper != null)
+            {
+                return _uiWrapper.getPosition();
+            }
+            return result;
+        }
+
     }
 }

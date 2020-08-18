@@ -64,6 +64,7 @@
     <Compile Include="ShedOrderException.cs" />
     <Compile Include="ShedParseException.cs" />
     <Compile Include="Shedule.cs" />
+    <Compile Include="VideoController.cs" />
     <Compile Include="WinFormsInterfaceWrapper.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
