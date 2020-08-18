@@ -75,7 +75,6 @@ namespace VideoPlayerEngine
         /// <param name="isFake">Нужно ли обрабатывать наступившее событие</param>
         private void FEEventInternal(bool isFake = false)
         {
-            FutureEventsList.FutureEvent lastFE = null;
             candidateLock.WaitOne();
             if (!isFake)
             {
