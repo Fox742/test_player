@@ -40,6 +40,7 @@ namespace VideoPlayerEngine
 
             _ringPlayback = ringPlayback;
             _filesQueue = new List<string>(Directory.GetFiles(folderWithVideo));
+            _filesQueue.Sort();
 
         }
 

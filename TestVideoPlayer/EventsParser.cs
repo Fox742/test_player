@@ -52,10 +52,16 @@ namespace VideoPlayerEngine
                     throw new ShedParseException(preambula + " не удалось разобрать время конца события");
                 }
 
+                if (beginEvent > endEvent)
+                {
+                    throw new ShedParseException(preambula + " время начала события Background не может быть больше времени конца");
+                }
+
                 if (substrings.Count < 4)
                 {
                     throw new ShedParseException(preambula + " не хватает последнего аргумента - пути к папке");
                 }
+                
                 Path = substrings[3];
                 result = new BackgroundEvent(beginEvent, stringNumber, fileString, Path, endEvent);
             }

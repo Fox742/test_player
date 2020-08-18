@@ -29,7 +29,6 @@ namespace VideoPlayerEngine
             try
             {
                 Shedule shd = new Shedule(sheduleFilePath);
-                //FutureEventsList fel = new FutureEventsList(shd);
                 videoController.LoadShedule(shd);
             }
             catch (ShedOrderException soe)
@@ -39,6 +38,10 @@ namespace VideoPlayerEngine
             catch (ShedParseException spe)
             {
                 InterfaceWrapper.showMessage(spe.Message,"Ошибка");
+            }
+            catch (ShedDataException sde)
+            {
+                InterfaceWrapper.showMessage(sde.Message, "Ошибка");
             }
             catch (System.Exception exc)
             {
