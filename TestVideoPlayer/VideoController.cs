@@ -75,6 +75,7 @@ namespace VideoPlayerEngine
         /// <param name="isFake">Нужно ли обрабатывать наступившее событие</param>
         private void FEEventInternal(bool isFake = false)
         {
+            FutureEventsList.FutureEvent lastFE = null;
             candidateLock.WaitOne();
             if (!isFake)
             {
@@ -91,6 +92,15 @@ namespace VideoPlayerEngine
             FutureEventsList.FutureEvent nextEvent = CurrentFEList.next();
             _FEtimer.Interval = (nextEvent.eventTime - DateTime.Now).TotalMilliseconds;
             _FEtimer.Start();
+
+            // Нужно обработать событие типа background, если оно было до DateTime.Now и не закончилось к моменту начала запуска расписания
+            if (isFake)
+            {
+                if ((CurrentFEList.LastBackgroundEvent != null) && (CurrentFEList.LastBackgroundEvent.path != null))
+                {
+                    MPlaylist.HandleEvent(CurrentFEList.LastBackgroundEvent);
+                }
+            }
 
             candidateLock.ReleaseMutex();
         }

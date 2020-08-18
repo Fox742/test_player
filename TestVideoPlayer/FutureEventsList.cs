@@ -32,6 +32,16 @@ namespace VideoPlayerEngine
 
         private FutureEvent _current = null;
 
+        private FutureEvent _lastBackgroundEvent;
+
+        public FutureEvent LastBackgroundEvent
+        {
+            get
+            {
+                return _lastBackgroundEvent;
+            }
+        }
+
         /// <summary>
         /// Создаём список будущих событий по расписанию
         /// 
@@ -93,6 +103,12 @@ namespace VideoPlayerEngine
                 {
                     result = fe;
                     break;
+                }
+
+                // Запоминаем последнее событие типа background, которое либо начинает background, либо - заканчивает
+                if (fe.ringPlayback || fe.path == null)
+                {
+                    _lastBackgroundEvent = fe;
                 }
             }
             _current = result;
