@@ -29,6 +29,7 @@ namespace VideoPlayerEngine
             try
             {
                 Shedule shd = new Shedule(sheduleFilePath);
+                InterfaceWrapper.refreshShedulePath(sheduleFilePath);
                 videoController.LoadShedule(shd);
             }
             catch (ShedOrderException soe)

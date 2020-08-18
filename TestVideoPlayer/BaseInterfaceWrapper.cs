@@ -51,5 +51,17 @@ namespace VideoPlayerEngine
         /// <returns></returns>
         public abstract double getPosition();
 
+        /// <summary>
+        /// Распечатать плейлист в интерфейсе
+        /// </summary>
+        /// <param name="items"></param>
+        /// <param name="selectIndex"></param>
+        public abstract void printPlayList(List<string> items, int selectIndex);
+
+        /// <summary>
+        /// Вывести в label путь к вфбранному файлу расписания
+        /// </summary>
+        /// <param name="shecdulePath"></param>
+        public abstract void refreshShedulePath(string shecdulePath);
     }
 }

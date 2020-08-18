@@ -75,5 +75,21 @@ namespace VideoPlayerEngine
             return result;
         }
 
+        public static void printPlayList(List<string>items, int selectIndex)
+        {
+            if (_uiWrapper != null)
+            {
+                _uiWrapper.printPlayList(items,selectIndex);
+            }
+        }
+
+        public static void refreshShedulePath(string shedulePath)
+        {
+            if (_uiWrapper != null)
+            {
+                _uiWrapper.refreshShedulePath(shedulePath);
+            }
+        }
+
     }
 }

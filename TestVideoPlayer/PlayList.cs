@@ -9,38 +9,50 @@ namespace VideoPlayerEngine
 {
     class PlayList
     {
-        public string currentFile
+        public string currentFile       {     get{return _filesQueue[_currentFileNumber];}    }
+
+        public int currentFileNumber    {     get{return _currentFileNumber;}                 }
+
+        public List<string> filenamesList
         {
             get
             {
-                return _filesQueue[_currentFileNumber];
+                List<string> result = new List<string>();
+
+                foreach (string onePath in _filesQueue)
+                {
+                    result.Add( filenamesByPath[onePath] );
+                }
+
+                return result;
             }
         }
 
         public double currentPosition
         {
-            get
-            {
-                return _position;
-            }
-            set
-            {
-                _position = value;
-            }
+            get {return _position;}
+            set{ _position = value;}
         }
 
         private bool _ringPlayback;
         private List<string> _filesQueue;
         private int _currentFileNumber = 0;
         private double _position = 0;
+        private Dictionary<string, string> filenamesByPath;
 
         public PlayList(string folderWithVideo, bool ringPlayback = false)
         {
             _filesQueue = new List<string>();
+            filenamesByPath = new Dictionary<string, string>();
 
             _ringPlayback = ringPlayback;
             _filesQueue = new List<string>(Directory.GetFiles(folderWithVideo));
             _filesQueue.Sort();
+            foreach( string filepath in _filesQueue )
+            {
+                FileInfo FI = new FileInfo(filepath);
+                filenamesByPath[filepath] = FI.Name;
+            }
 
         }
 

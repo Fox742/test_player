@@ -24,6 +24,23 @@ namespace VideoPlayerEngine
             InterfaceWrapper.VideoEndEvent += OnVideoEnd;
         }
 
+        private void printCurrentPlaylist()
+        {
+            int activeIndex = -1;
+            List<string> Files = new List<string>();
+            if (_interrupted.Count > 0)
+            {
+                activeIndex = _interrupted[_interrupted.Count - 1].currentFileNumber;
+                Files = _interrupted[_interrupted.Count - 1].filenamesList;
+            }
+            else if (_background!=null)
+            {
+                activeIndex =   _background.currentFileNumber;
+                Files =         _background.filenamesList;
+            }
+            InterfaceWrapper.printPlayList(Files,activeIndex);
+        }
+
         private void OnVideoEnd()
         {
             PlaylistLock.WaitOne();
@@ -40,6 +57,7 @@ namespace VideoPlayerEngine
             }
 
             changeVideo();
+            printCurrentPlaylist();
             PlaylistLock.ReleaseMutex();
         }
 
@@ -54,6 +72,7 @@ namespace VideoPlayerEngine
             {
                 _interrupted[i].reset();
             }
+            printCurrentPlaylist();
             PlaylistLock.ReleaseMutex();
         }
 
@@ -72,14 +91,14 @@ namespace VideoPlayerEngine
                 else if (_interrupted.Count == 1)   // Происходит прерывание воспроизведения бекграунд-файла. Значит, надо остановить видео, 
                                                     //  сохранить позицию беграунд-плейлиста и запустить видео первого плейлиста из прерываний
                 {
-                    InterfaceWrapper.stopVideo();
                     _background.currentPosition = InterfaceWrapper.getCurrentPosition();
+                    InterfaceWrapper.stopVideo();
                     InterfaceWrapper.startVideo(_interrupted[0].currentFile, _interrupted[0].currentPosition);
                 }
                 else if (_interrupted.Count > 1)    // Происходит прерывания видеопотока прерывания :) Нужно сохранить позицию предыдущего потока прерывания и запустить новый
                 {
-                    InterfaceWrapper.stopVideo();
                     _interrupted[_interrupted.Count-2].currentPosition = InterfaceWrapper.getCurrentPosition();
+                    InterfaceWrapper.stopVideo();
                     InterfaceWrapper.startVideo(_interrupted[_interrupted.Count-1].currentFile, _interrupted[_interrupted.Count - 1].currentPosition);
                 }
             }
@@ -155,6 +174,7 @@ namespace VideoPlayerEngine
                 // Interrupted - запускаются всегда
                 changeVideo(true);
             }
+            printCurrentPlaylist();
             PlaylistLock.ReleaseMutex();
 
         }

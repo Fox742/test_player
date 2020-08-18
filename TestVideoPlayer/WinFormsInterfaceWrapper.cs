@@ -10,7 +10,7 @@ using WMPLib;
 
 namespace TestVideoPlayer
 {
-    class WinFormsInterfaceWrapper:BaseInterfaceWrapper
+    class WinFormsInterfaceWrapper : BaseInterfaceWrapper
     {
         private Form1 _mainForm = null;
 
@@ -18,7 +18,7 @@ namespace TestVideoPlayer
         {
             _mainForm = mainForm;
             _mainForm.WMPAccessibility = false;
-            _mainForm.subscribeVideoEndEvent( VideoChangeState );
+            _mainForm.subscribeVideoEndEvent(VideoChangeState);
         }
 
         private void VideoChangeState(object sender, _WMPOCXEvents_PlayStateChangeEvent e)
@@ -29,7 +29,7 @@ namespace TestVideoPlayer
             }
         }
 
-        public override void PrintMessage(string message, string Caption="")
+        public override void PrintMessage(string message, string Caption = "")
         {
             MessageBox.Show(message, Caption, MessageBoxButtons.OK);
         }
@@ -37,7 +37,7 @@ namespace TestVideoPlayer
         public override void startVideo(string path, double position)
         {
             _mainForm.WMPVideo = path;
-            if (position!=0.0)
+            if (position != 0.0)
                 _mainForm.PositionWMP = position;
         }
 
@@ -48,7 +48,17 @@ namespace TestVideoPlayer
 
         public override void stopVideo()
         {
+            _mainForm.stopVideo();
+        }
 
+        public override void printPlayList(List<string> items, int selectIndex)
+        {
+            _mainForm.printPlayList(items, selectIndex);
+        }
+
+        public override void refreshShedulePath(string shecdulePath)
+        {
+            _mainForm.printShedulePath(shecdulePath);
         }
 
     }

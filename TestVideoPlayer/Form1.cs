@@ -81,5 +81,33 @@ namespace TestVideoPlayer
                 (o) => axWindowsMediaPlayer1.PlayStateChange+=_handler, null);
         }
 
+        private void internalPrintPlayList(List<string> items, int selectIndex)
+        {
+            listView1.Items.Clear();
+            for (int i = 0; i < items.Count; i++)
+            {
+                string itemText = items[i];
+                if (i == selectIndex)
+                {
+                    itemText = "> " + itemText;
+                }
+                listView1.Items.Add(itemText);
+            }
+        }
+
+        public void printPlayList(List<string> items, int selectIndex)
+        {
+            _synchronizationContext.Post(
+                (o) => internalPrintPlayList(items,selectIndex), null);
+
+        }
+
+        public void printShedulePath(string pathToPrint)
+        {
+            _synchronizationContext.Post(
+                (o) => label2.Text =  pathToPrint, null);
+
+        }
+
     }
 }
