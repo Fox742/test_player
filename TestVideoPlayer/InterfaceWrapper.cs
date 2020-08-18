@@ -53,6 +53,14 @@ namespace VideoPlayerEngine
             }
         }
 
+        internal static void stopVideo()
+        {
+            if (_uiWrapper != null)
+            {
+                _uiWrapper.stopVideo();
+            }
+        }
+
         /// <summary>
         /// Получить текущую позицию в видеопроигрывателе
         /// </summary>

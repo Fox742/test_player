@@ -56,6 +56,12 @@ namespace TestVideoPlayer
             }
         }
 
+        public void stopVideo()
+        {
+            _synchronizationContext.Post(
+            (o) => axWindowsMediaPlayer1.Ctlcontrols.stop(), null);
+        }
+
         public double PositionWMP
         {
             set

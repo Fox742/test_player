@@ -46,5 +46,10 @@ namespace TestVideoPlayer
             return _mainForm.PositionWMP;
         }
 
+        public override void stopVideo()
+        {
+
+        }
+
     }
 }

@@ -41,6 +41,11 @@ namespace VideoPlayerEngine
         public abstract void startVideo(string path, double position);
 
         /// <summary>
+        /// Остановить видео
+        /// </summary>
+        public abstract void stopVideo();
+
+        /// <summary>
         /// Получить текущую позицию в видео, которое сейчас проигрывается
         /// </summary>
         /// <returns></returns>
