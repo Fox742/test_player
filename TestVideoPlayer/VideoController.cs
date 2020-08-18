@@ -89,9 +89,13 @@ namespace VideoPlayerEngine
 
             // Устанавливаем будущее событие
             FutureEventsList.FutureEvent nextEvent = CurrentFEList.next();
-            _FEtimer.Interval = (nextEvent.eventTime - DateTime.Now).TotalMilliseconds;
-            _FEtimer.Start();
 
+            // Может так случится, что событий больше нет - значит не надо вообще запускать таймер
+            if (nextEvent != null)
+            {
+                _FEtimer.Interval = (nextEvent.eventTime - DateTime.Now).TotalMilliseconds;
+                _FEtimer.Start();
+            }
             // Нужно обработать событие типа background, если оно было до DateTime.Now и не закончилось к моменту начала запуска расписания
             if (isFake)
             {
@@ -100,6 +104,7 @@ namespace VideoPlayerEngine
                     MPlaylist.HandleEvent(CurrentFEList.LastBackgroundEvent);
                 }
             }
+
 
             candidateLock.ReleaseMutex();
         }

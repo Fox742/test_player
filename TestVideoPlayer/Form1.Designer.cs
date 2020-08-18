@@ -102,6 +102,8 @@
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.axWindowsMediaPlayer1);
             this.Controls.Add(this.button1);
+            this.MaximumSize = new System.Drawing.Size(917, 551);
+            this.MinimumSize = new System.Drawing.Size(917, 551);
             this.Name = "Form1";
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer1)).EndInit();
