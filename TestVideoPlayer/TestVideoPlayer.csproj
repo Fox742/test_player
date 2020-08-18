@@ -55,6 +55,7 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="FutureEventsList.cs" />
     <Compile Include="InterfaceWrapper.cs" />
     <Compile Include="InterruptEvent.cs" />
     <Compile Include="Program.cs" />

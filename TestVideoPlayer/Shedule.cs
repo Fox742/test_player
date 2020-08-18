@@ -89,12 +89,13 @@ namespace VideoPlayerEngine
         /// <param name="Filename"></param>
         public Shedule(string Filename)
         {
+            List<BaseEvent> events = new List<BaseEvent>();
+
             // Прочитаем файл с расписанием
             List<string>rawStrings = new List<string>(File.ReadAllLines(Filename));
             EventsParser parser = new EventsParser();
 
-            List<BaseEvent> events = new List<BaseEvent>();
-
+            
             // Проходимся по строкам файла с расписанием и по каждой из строк - создаём событие
             for (int i=0; i<rawStrings.Count;i++)
             {
@@ -113,5 +114,16 @@ namespace VideoPlayerEngine
             }
             _events = events;
         }
+        
+        public long Length { get { return _events.Count; } }
+
+        public BaseEvent this[int index]
+        {
+            get
+            {
+                return _events[index];
+            }
+        }
+
     }
 }

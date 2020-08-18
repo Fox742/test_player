@@ -9,7 +9,7 @@ namespace VideoPlayerEngine
     /// <summary>
     /// Обёртка интерфейса, через которую выводит информацию движок
     /// </summary>
-    internal static class InterfaceWrapper
+    static class InterfaceWrapper
     {
         static private BaseInterfaceWrapper _uiWrapper = null;
         static public void initInterface(BaseInterfaceWrapper uiWrapper)

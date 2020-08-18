@@ -26,6 +26,7 @@ namespace VideoPlayerEngine
             try
             {
                 Shedule shd = new Shedule(sheduleFilePath);
+                FutureEventsList fel = new FutureEventsList(shd);
             }
             catch (ShedOrderException soe)
             {
