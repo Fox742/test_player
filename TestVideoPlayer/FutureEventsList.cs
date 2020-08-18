@@ -29,7 +29,9 @@ namespace VideoPlayerEngine
         }
 
         private List<FutureEvent> _futureEvents;
-        
+
+        private FutureEvent _current = null;
+
         /// <summary>
         /// Создаём список будущих событий по расписанию
         /// 
@@ -78,6 +80,28 @@ namespace VideoPlayerEngine
                 _futureEvents.Add(new FutureEvent(backgroundEnd));
             }
 
+        }
+
+        public FutureEvent next()
+        {
+            DateTime currentDT = DateTime.Now;
+            FutureEvent result = null;
+
+            foreach (FutureEvent fe in _futureEvents)
+            {
+                if (fe.eventTime > currentDT)
+                {
+                    result = fe;
+                    break;
+                }
+            }
+            _current = result;
+            return result;
+        }
+        
+        public FutureEvent current()
+        {
+            return _current;
         }
 
     }

@@ -58,6 +58,8 @@
     <Compile Include="FutureEventsList.cs" />
     <Compile Include="InterfaceWrapper.cs" />
     <Compile Include="InterruptEvent.cs" />
+    <Compile Include="MultiPlayList.cs" />
+    <Compile Include="PlayList.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Engine.cs" />
