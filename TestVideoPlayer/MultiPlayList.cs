@@ -148,31 +148,31 @@ namespace VideoPlayerEngine
         public void HandleEvent(FutureEventsList.FutureEvent fe)
         {
             PlaylistLock.WaitOne();
-            if (fe.path==null) // Событие завершения проигрывания из Background
+            if (fe.path == null) // Событие завершения проигрывания из Background
             {
-                // Если мы проигрываем Background - мы должны его остановить
-                if (_interrupted.Count == 0)
-                {
-                    InterfaceWrapper.stopVideo();
-                }
-                _background = null;
+                    // Если мы проигрываем Background - мы должны его остановить
+                    if (_interrupted.Count == 0)
+                    {
+                        InterfaceWrapper.stopVideo();
+                    }
+                    _background = null;
 
             }
             else if (fe.ringPlayback) // Событие Background (для таких событие установлен флаг "кольцевое воспроизведение")
             {
-                _background = new PlayList(fe.path,fe.ringPlayback);
-                if (_interrupted.Count==0)
-                {
-                    // Должны запустить _Background-плейлист
-                    changeVideo(true);
-                }
+                    _background = new PlayList(fe.path, fe.ringPlayback);
+                    if (_interrupted.Count == 0)
+                    {
+                        // Должны запустить _Background-плейлист
+                        changeVideo(true);
+                    }
 
             }
             else // (fe.ringPlayback == false) - Событие interrupt
             {
-                _interrupted.Add(new PlayList(fe.path,fe.ringPlayback));
-                // Interrupted - запускаются всегда
-                changeVideo(true);
+                    _interrupted.Add(new PlayList(fe.path, fe.ringPlayback));
+                    // Interrupted - запускаются всегда
+                    changeVideo(true);
             }
             printCurrentPlaylist();
             PlaylistLock.ReleaseMutex();

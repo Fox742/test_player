@@ -96,6 +96,11 @@ namespace VideoPlayerEngine
                 _FEtimer.Interval = (nextEvent.eventTime - DateTime.Now).TotalMilliseconds;
                 _FEtimer.Start();
             }
+            else
+            {
+                // Но в этом случае  его нужно стопнуть!
+                _FEtimer.Stop();
+            }
             // Нужно обработать событие типа background, если оно было до DateTime.Now и не закончилось к моменту начала запуска расписания
             if (isFake)
             {
