@@ -61,5 +61,10 @@ namespace TestVideoPlayer
             _mainForm.printShedulePath(shecdulePath);
         }
 
+        public override void printShedulePlaying(string shedulePath)
+        {
+            _mainForm.printShedulePlaying(shedulePath);
+        }
+
     }
 }

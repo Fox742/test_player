@@ -109,5 +109,11 @@ namespace TestVideoPlayer
 
         }
 
+        public void printShedulePlaying(string shedulePath)
+        {
+                _synchronizationContext.Post(
+                (o) => label4.Text = shedulePath, null);
+        }
+
     }
 }

@@ -21,6 +21,7 @@ namespace VideoPlayerEngine
 
         private FutureEventsList CurrentFEList = null;
         private FutureEventsList CandidateFEList = null;
+        private string candidatePath = "";
         private Mutex candidateLock = new Mutex();
         private MultiPlayList MPlaylist;
         private System.Timers.Timer _FEtimer;
@@ -35,9 +36,14 @@ namespace VideoPlayerEngine
             _FEtimer.Elapsed += OnFELEvent;
         }
 
+        /// <summary>
+        /// Обработчик события "закончилось расписание"
+        /// </summary>
         private void onPlaybackCompleted()
         {
             candidateLock.WaitOne();
+
+            // Смотрим - если есть кандидатный список будущих событий - запускаем его
             if (CandidateFEList != null)
             {
                 launchPlayback();
@@ -49,7 +55,7 @@ namespace VideoPlayerEngine
         /// Загрузить новое расписание
         /// </summary>
         /// <param name="shedule"></param>
-        public void LoadShedule(Shedule shedule)
+        public void LoadShedule(Shedule shedule, string shedulePath)
         {
             // Создаём новый список будущих событий
             FutureEventsList newList = new FutureEventsList(shedule);
@@ -59,6 +65,7 @@ namespace VideoPlayerEngine
             changingShedule = true;
             MPlaylist.resetPlayLists();
             CandidateFEList = newList;
+            candidatePath = shedulePath;
             candidateLock.ReleaseMutex();
 
             // Если плейлист ничего не проигрывает - вызываем функцию запуска расписания
@@ -75,6 +82,7 @@ namespace VideoPlayerEngine
         {
             _FEtimer.Enabled = false;
             CurrentFEList = CandidateFEList;
+            InterfaceWrapper.printShedulePlaying(candidatePath);
             changingShedule = false;
             CandidateFEList = null;
             FEEventInternal(true);

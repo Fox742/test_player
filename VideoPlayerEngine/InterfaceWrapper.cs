@@ -83,6 +83,14 @@ namespace VideoPlayerEngine
             }
         }
 
+        public static void printShedulePlaying(string shedulePath)
+        {
+            if (_uiWrapper != null)
+            {
+                _uiWrapper.printShedulePlaying(shedulePath);
+            }
+        }
+
         public static void refreshShedulePath(string shedulePath)
         {
             if (_uiWrapper != null)

@@ -10,24 +10,30 @@ namespace VideoPlayerEngine
     public delegate void VideoPlaybackCompleted();
 
     /// <summary>
-    /// Иерархический плейлист, который хранит информацию о всех видео должны ещё проиграться. 
+    /// Иерархический плейлист, который хранит информацию о всех видео должны ещё проиграться.
     /// На вход получает события из списка будущих событий. Управляет проигрываетелем в интерфейсе
     /// </summary>
     class MultiPlayList
     {
 
+        /// <summary>
+        /// Событие об окончании проигрывания всего расписания
+        /// </summary>
         public event VideoPlaybackCompleted PlaybackCompleted;
         
-        private PlayList _background = null;
-        private List<PlayList> _interrupted;
-        private Mutex PlaylistLock = new Mutex();
+        private PlayList _background = null;        // Плейлист бекграундных видео
+        private List<PlayList> _interrupted;        // Список активных плейлистов interrupted
+        private Mutex PlaylistLock = new Mutex();   // Мьютекс, защищающий плейлисты от одноворвменного доступа из обработчика события таймера и обработчика событий плеера
 
         public MultiPlayList()
         {
             _interrupted = new List<PlayList>();
-            InterfaceWrapper.VideoEndEvent += OnVideoEnd;
+            InterfaceWrapper.VideoEndEvent += OnVideoEnd; // Подписываемся на событие плеера о том, что текущее видео закончилось
         }
 
+        /// <summary>
+        /// Вывести в интерфейс информацию о текущем плейлисте
+        /// </summary>
         private void printCurrentPlaylist()
         {
             int activeIndex = -1;
@@ -45,31 +51,50 @@ namespace VideoPlayerEngine
             InterfaceWrapper.printPlayList(Files,activeIndex);
         }
 
+        /// <summary>
+        /// Обработчик события завершения текущего видео
+        /// </summary>
         private void OnVideoEnd()
         {
             PlaylistLock.WaitOne();
+
+            // Так как видео закончилось - нам нужно перевинуть текущий плейлист на следующее видео (stepNext)
             if (_interrupted.Count>0)
             {
-                _interrupted[_interrupted.Count - 1].stepNext();
+                _interrupted.Last().stepNext();
             }
             else
             {
                 if (_background!=null)
                 {
                     _background.stepNext();
+                    if (_background.played())
+                    {
+                        _background = null;
+                    }
                 }
             }
 
+            // Определяем и запускаем следующее видео
             changeVideo();
+
+            // Печатаем текущий плейлист
             printCurrentPlaylist();
+
             PlaylistLock.ReleaseMutex();
 
+            // Если никих плейлистов не осталось - это означает, что больше проигрывать нечего и сигнализируем об подписчикам
             if (_background==null && _interrupted.Count == 0)
             {
                 PlaybackCompleted();
             }
         }
 
+        /// <summary>
+        /// Заресетить все плейлисты. В наших терминах "заресетить" - это удалить все видео, которые должны проигрываться после текущих.
+        ///     Делается это в том случае, если происходит смена расписания на ходу, чтобы никакие видео кроме текущих не проигрывались больше.
+        ///             (Текущие видео в данном случае - это видео, которое либо проигрывается, либо было прервано)
+        /// </summary>
         public void resetPlayLists()
         {
             PlaylistLock.WaitOne();
@@ -93,11 +118,11 @@ namespace VideoPlayerEngine
         {
             if (up) // Нужно запустить только что открытый плейлист
             {
-                if ( _interrupted.Count==0 ) // Нужно запустить бекграунд-видео
+                if ( _interrupted.Count==0 ) // Нужно запустить бекграунд-видео (так как interrupted-плейлистов нет)
                 {
                     InterfaceWrapper.startVideo(_background.currentFile,_background.currentPosition);
                 }
-                else if (_interrupted.Count == 1)   // Происходит прерывание воспроизведения бекграунд-файла. Значит, надо остановить видео, 
+                else if (_interrupted.Count == 1)   // Происходит прерывание воспроизведения бекграунд-плейлиста. Значит, надо остановить видео, 
                                                     //  сохранить позицию беграунд-плейлиста и запустить видео первого плейлиста из прерываний
                 {
                     _background.currentPosition = InterfaceWrapper.getCurrentPosition();
@@ -108,14 +133,14 @@ namespace VideoPlayerEngine
                 {
                     _interrupted[_interrupted.Count-2].currentPosition = InterfaceWrapper.getCurrentPosition();
                     InterfaceWrapper.stopVideo();
-                    InterfaceWrapper.startVideo(_interrupted[_interrupted.Count-1].currentFile, _interrupted[_interrupted.Count - 1].currentPosition);
+                    InterfaceWrapper.startVideo(_interrupted.Last().currentFile, _interrupted.Last().currentPosition);
                 }
             }
             else // Закончилось предыдущее видео - нужно запустить следующее видео (если оно есть)
             {
                 if (_interrupted.Count>0) // Если есть интерраптед плейлисты
                 {
-                    while (_interrupted[_interrupted.Count-1].played()) // Выбрасываем interrupted-плейлисты, которые мы уже проиграли
+                    while (_interrupted.Last().played()) // Выбрасываем interrupted-плейлисты, которые мы уже проиграли
                     {
                         _interrupted.RemoveAt(_interrupted.Count - 1);
                         if (_interrupted.Count == 0)
@@ -124,19 +149,14 @@ namespace VideoPlayerEngine
                     // Если в interrupted остался хотя бы один плейлист из которого ещё что-то можно проиграть - запускаем
                     if (_interrupted.Count>0)
                     {
-                        InterfaceWrapper.startVideo(_interrupted[_interrupted.Count - 1].currentFile, _interrupted[_interrupted.Count - 1].currentPosition);
+                        InterfaceWrapper.startVideo(_interrupted.Last().currentFile, _interrupted.Last().currentPosition);
                         return;
                     }
                 }
                 // Все interrupted плейлистов ничего не запустили - надо посмотреть можно ли что-то запустить из background
-                //if ((_background != null)&&(_background.stepNext())) // Можно, если беграунд-плейлист не пустой и у него есть следующий элемент, который можно запустить
                 if (_background != null)
                 {
                     InterfaceWrapper.startVideo(_background.currentFile, _background.currentPosition);
-                }
-                else
-                {
-                    _background = null; // Увы, но нет, из него нельзя ничего запустить тоже - поэтому зануляем его.
                 }
             }
         }

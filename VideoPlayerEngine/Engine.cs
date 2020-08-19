@@ -26,11 +26,12 @@ namespace VideoPlayerEngine
         /// <param name="sheduleFilePath"></param>
         public void LoadShedule(string sheduleFilePath)
         {
+            
             try
             {
                 Shedule shd = new Shedule(sheduleFilePath);
                 InterfaceWrapper.refreshShedulePath(sheduleFilePath);
-                videoController.LoadShedule(shd);
+                videoController.LoadShedule(shd,sheduleFilePath);
             }
             catch (ShedOrderException soe)
             {
@@ -48,7 +49,6 @@ namespace VideoPlayerEngine
             {
                 InterfaceWrapper.showMessage("Не удалось прочитать расписание из файла. Вот точная причина: "+exc.Message, "Ошибка");
             }
-
         }
 
     }

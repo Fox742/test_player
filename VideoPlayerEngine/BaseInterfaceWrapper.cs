@@ -59,9 +59,15 @@ namespace VideoPlayerEngine
         public abstract void printPlayList(List<string> items, int selectIndex);
 
         /// <summary>
-        /// Вывести в label путь к вфбранному файлу расписания
+        /// Вывести в label путь к выбранному файлу расписания
         /// </summary>
         /// <param name="shecdulePath"></param>
         public abstract void refreshShedulePath(string shecdulePath);
+
+        /// <summary>
+        /// Напечатать в интерфейсе проигрываемое расписание (оно может не совпадать с загруженным пока загруженное не стало проигрываться)
+        /// </summary>
+        /// <param name="shedulePath"></param>
+        public abstract void printShedulePlaying(string shedulePath);
     }
 }
