@@ -45,29 +45,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BackgroundEvent.cs" />
-    <Compile Include="BaseEvent.cs" />
-    <Compile Include="BaseInterfaceWrapper.cs" />
-    <Compile Include="EventsParser.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="FutureEventsList.cs" />
-    <Compile Include="InterfaceWrapper.cs" />
-    <Compile Include="InterruptEvent.cs" />
-    <Compile Include="MultiPlayList.cs" />
-    <Compile Include="PlayList.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Engine.cs" />
-    <Compile Include="ShedDataException.cs" />
-    <Compile Include="ShedOrderException.cs" />
-    <Compile Include="ShedParseException.cs" />
-    <Compile Include="Shedule.cs" />
-    <Compile Include="VideoController.cs" />
     <Compile Include="WinFormsInterfaceWrapper.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
@@ -112,6 +97,12 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\VideoPlayerEngine\VideoPlayerEngine.csproj">
+      <Project>{923bb88c-6456-41fe-bb2e-331f9c71b4a3}</Project>
+      <Name>VideoPlayerEngine</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
