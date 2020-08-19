@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 
 namespace VideoPlayerEngine
 {
+    public delegate void VideoPlaybackCompleted();
+
     /// <summary>
     /// Иерархический плейлист, который хранит информацию о всех видео должны ещё проиграться. 
     /// На вход получает события из списка будущих событий. Управляет проигрываетелем в интерфейсе
@@ -14,6 +16,8 @@ namespace VideoPlayerEngine
     class MultiPlayList
     {
 
+        public event VideoPlaybackCompleted PlaybackCompleted;
+        
         private PlayList _background = null;
         private List<PlayList> _interrupted;
         private Mutex PlaylistLock = new Mutex();
@@ -59,6 +63,11 @@ namespace VideoPlayerEngine
             changeVideo();
             printCurrentPlaylist();
             PlaylistLock.ReleaseMutex();
+
+            if (_background==null && _interrupted.Count == 0)
+            {
+                PlaybackCompleted();
+            }
         }
 
         public void resetPlayLists()

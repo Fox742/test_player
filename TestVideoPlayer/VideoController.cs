@@ -28,9 +28,21 @@ namespace VideoPlayerEngine
         public VideoController()
         {
             MPlaylist = new MultiPlayList();
+            MPlaylist.PlaybackCompleted += onPlaybackCompleted;
+
             _FEtimer = new System.Timers.Timer();
             _FEtimer.AutoReset = true;
             _FEtimer.Elapsed += OnFELEvent;
+        }
+
+        private void onPlaybackCompleted()
+        {
+            candidateLock.WaitOne();
+            if (CandidateFEList != null)
+            {
+                launchPlayback();
+            }
+            candidateLock.ReleaseMutex();
         }
 
         /// <summary>
@@ -52,19 +64,19 @@ namespace VideoPlayerEngine
             // Если плейлист ничего не проигрывает - вызываем функцию запуска расписания
             if (!MPlaylist.busy())
             {
+                candidateLock.WaitOne();
                 launchPlayback();
+                candidateLock.ReleaseMutex();
             }
 
         }
 
         private void launchPlayback()
         {
-            candidateLock.WaitOne();
             _FEtimer.Enabled = false;
-
             CurrentFEList = CandidateFEList;
             changingShedule = false;
-            candidateLock.ReleaseMutex();
+            CandidateFEList = null;
             FEEventInternal(true);
         }
 
