@@ -62,7 +62,7 @@ namespace VideoPlayerEngine
         public void reset()
         {
             _ringPlayback = false; // Если у нас бекграундный плейлист с _ringPlay=true мы тоже его обязаны остановить
-            _filesQueue.RemoveRange(_currentFileNumber, _filesQueue.Count - _currentFileNumber);
+            _filesQueue.RemoveRange(_currentFileNumber+1, _filesQueue.Count - _currentFileNumber-1);
         }
 
         public bool played()
